@@ -97,6 +97,9 @@ file_formats:
   - epub
   video:
   - mp4
+save_path: D:\telegram_media_downloader
+disable_syslog:
+- INFO
 ```
 
 - api_hash  - The api_hash you got from telegram apps
@@ -106,21 +109,14 @@ file_formats:
 - ids_to_retry - `Leave it as it is.` This is used by the downloader script to keep track of all skipped downloads so that it can be downloaded during the next execution of the script.
 - media_types - Type of media to download, you can update which type of media you want to download it can be one or any of the available types.
 - file_formats - File types to download for supported media types which are `audio`, `document` and `video`. Default format is `all`, downloads all files.
-
+- save_path - Where you want to storge download file
+- disable_syslog - You can choose which types of logs to disable,see `logging._nameToLevel`
 ## Execution
 ```sh
 $ python3 media_downloader.py
 ```
-All the downloaded media will be stored inside  respective direcotry named  in the same path as the python script.
 
-| Media type | Download directory |
-|--|--|
-| audio | path/to/project/audio |
-| document | path/to/project/document |
-| photo | path/to/project/photo |
-| video | path/to/project/video |
-| voice | path/to/project/voice |
-| voice_note | path/to/project/voice_note |
+All the downloaded media will be stored inside `save_path`, and floder names include channel id or chat id.All files are rented by `month`.
 
 ## Proxy
 `socks4, socks5, http` proxies are supported in this project currently. To use it, add the following to the bottom of your `config.yaml` file
