@@ -1,7 +1,6 @@
 """Application module"""
 import os
 from typing import List
-
 import yaml
 
 # pylint: disable = R0902
@@ -24,7 +23,7 @@ class Application:
         self.reset()
 
         try:
-            with open(os.path.join(os.path.abspath("."), self.config_file)) as f:
+            with open(os.path.join(os.path.abspath('.'), self.config_file)) as f:
                 self.config = yaml.safe_load(f)
                 self.load_config(self.config)
         except Exception:
@@ -37,7 +36,7 @@ class Application:
         self.downloaded_ids: list = []
         self.failed_ids: list = []
         self.disable_syslog: list = []
-        self.save_path = os.path.abspath(".")
+        self.save_path = os.path.abspath('.')
         self.ids_to_retry: list = []
         self.api_id: str = ""
         self.api_hash: str = ""
@@ -48,7 +47,6 @@ class Application:
         self.last_read_message_id = 0
         self.restart_program = False
         self.config: dict = {}
-        self.file_path_prefix: List[str] = ["chat_title", "media_datetime"]
 
     def load_config(self, _config: dict) -> bool:
         """load config from str.
@@ -89,41 +87,8 @@ class Application:
             self.proxy = _config["proxy"]
         if _config.get("restart_program"):
             self.restart_program = _config["restart_program"]
-        if _config.get("file_path_prefix"):
-            self.file_path_prefix = _config["file_path_prefix"]
+
         return True
-
-    def get_file_save_path(
-        self, media_type: str, chat_title: str, media_datetime: str
-    ) -> str:
-        """Get file save path prefix.
-
-        Parameters
-        ----------
-        media_type: str
-            see config.yaml media_types
-
-        chat_title: str
-            see channel or group title
-
-        media_datetime: str
-            media datatime
-
-        Returns
-        -------
-        str
-            file save path prefix
-        """
-
-        res: str = self.save_path
-        for iter in self.file_path_prefix:
-            if iter == "chat_title":
-                res = os.path.join(res, chat_title)
-            elif iter == "media_datetime":
-                res = os.path.join(res, media_datetime)
-            elif iter == "media_type":
-                res = os.path.join(res, media_type)
-        return res
 
     def need_skip_message(self, message_id: int) -> bool:
         """if need skip download message.
@@ -150,14 +115,14 @@ class Application:
 
         # pylint: disable = W0201
         self.ids_to_retry = (
-            list(set(self.ids_to_retry) - set(self.downloaded_ids)) + self.failed_ids
+            list(set(self.ids_to_retry) -
+                 set(self.downloaded_ids)) + self.failed_ids
         )
 
         self.config["last_read_message_id"] = self.last_read_message_id
         self.config["ids_to_retry"] = self.ids_to_retry
         self.config["disable_syslog"] = self.disable_syslog
         self.config["save_path"] = self.save_path
-        self.config["file_path_prefix"] = self.file_path_prefix
 
         if immediate:
             with open(self.config_file, "w") as yaml_file:
