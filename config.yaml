@@ -1,22 +1,8 @@
-api_hash: f689e50c58309525f591e53dbf20b325
-api_id: 10502402
-bot_token: 5331758252:AAG05jKtjEQFjnNlMeeArefFxilAMDZddt8
-chat_id: me
-disable_syslog:
-- INFO
-file_formats:
-  audio:
-  - all
-  document:
-  - all
-  video:
-  - all
-file_path_prefix:
-- chat_title
-- media_datetime
-
-ids_to_retry: []
+api_hash: your_api_hash
+api_id: your_api_id
+chat_id: telegram_chat_id
 last_read_message_id: 0
+ids_to_retry: []
 media_types:
 - audio
 - photo
@@ -24,8 +10,15 @@ media_types:
 - document
 - voice
 - video_note
-proxy:
-  hostname: 127.0.0.1
-  port: 10808
-  scheme: socks5
-save_path: E:\github\telegram_media_downloader
+file_formats:
+  audio:
+  - all
+  document:
+  - all
+  video:
+  - all
+disable_syslog:
+- INFO
+file_path_prefix:
+- chat_title
+- media_datetime
