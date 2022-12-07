@@ -154,12 +154,12 @@ file_path_prefix:
 该项目目前支持 socks4、socks5、http 代理。要使用它，请将以下内容添加到`config.yaml`文件的底部
 
 ```yaml
-代理人：
-  方案：socks5
-  主机名：11.22.33.44
-  端口：1234
-  用户名：你的用户名
-  密码：你的密码
+proxy:
+  scheme: socks5
+  hostname: 127.0.0.1
+  port: 1234
+  username: 你的用户名（可选）
+  password: 你的密码（可选）
 ```
 
 如果您的代理不需要授权，您可以省略用户名和密码。然后代理将自动启用。

@@ -148,10 +148,10 @@ If the configuration is empty, all files are saved under `save_path`.
 ```yaml
 proxy:
   scheme: socks5
-  hostname: 11.22.33.44
+  hostname: 127.0.0.1
   port: 1234
-  username: your_username
-  password: your_password
+  username: your_username(option)
+  password: your_password(option)
 ```
 
 If your proxy doesn’t require authorization you can omit username and password. Then the proxy will automatically be enabled.
