@@ -121,12 +121,12 @@ disable_syslog:
 - **ids_to_retry** - `Leave it as it is.` This is used by the downloader script to keep track of all skipped downloads so that it can be downloaded during the next execution of the script.
 - **media_types** - Type of media to download, you can update which type of media you want to download it can be one or any of the available types.
 - **file_formats** - File types to download for supported media types which are `audio`, `document` and `video`. Default format is `all`, downloads all files.
-- **save_path** - Where you want to storge download file
-- **file_path_prefix**
-  - `chat_title`      - channel or group title, it will be chat id if not exist title
-  - `media_datetime`  - media date, also see pyrogram.types.Message.date.strftime("%Y_%m")
-  - `meida_type`      - meida type, also see `media_types`
-- **disable_syslog** - You can choose which types of logs to disable,see `logging._nameToLevel`
+- **save_path** - The root directory where you want to store downloaded files.
+- **file_path_prefix** - Store file subfolders, the order of the list is not fixed, can be randomly combined.
+  - `chat_title`      - channel or group title, it will be chat id if not exist title.
+  - `media_datetime`  - media date, also see pyrogram.types.Message.date.strftime("%Y_%m").
+  - `meida_type`      - meida type, also see `media_types`.
+- **disable_syslog** - You can choose which types of logs to disable,see `logging._nameToLevel`.
 
 ## Execution
 
@@ -134,7 +134,12 @@ disable_syslog:
 python3 media_downloader.py
 ```
 
-All the downloaded media will be stored inside `save_path`, and floder names include channel id or chat id.All files are rented by `month`.
+All downloaded media will be stored at the root of `save_path`.
+The specific location reference is as follows:
+
+The complete directory of video download is: `save_path`/`chat_title`/`media_datetime`/`meida_type`.
+The order of the list is not fixed and can be randomly combined.
+If the configuration is empty, all files are saved under `save_path`.
 
 ## Proxy
 
