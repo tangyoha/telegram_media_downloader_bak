@@ -58,7 +58,7 @@ pip3 install -r requirements.txt
 所有配置都通过 config.yaml 文件传递​​给 `Telegram Media Downloader`。
 
 **获取您的 API 密钥：**
-第一步需要您获得有效的 Telegram API 密钥（API id/哈希对）：
+第一步需要您获得有效的 Telegram API 密钥（API id/hash pair）：
 
 1. 访问 [https://my.telegram.org/apps](https://my.telegram.org/apps) 并使用您的 Telegram 帐户登录。
 2. 填写表格以注册新的 Telegram 应用程序。
@@ -122,9 +122,8 @@ disable_syslog:
 - **ids_to_retry** - `保持原样。`下载器脚本使用它来跟踪所有跳过的下载，以便在下次执行脚本时可以下载它。
 - **media_types** - 要下载的媒体类型，您可以更新要下载的媒体类型，它可以是一种或任何可用类型。
 - **file_formats** - 为支持的媒体类型（“音频”、“文档”和“视频”）下载的文件类型。默认格式为“all”，下载所有文件。
-- save_path - 你想存储下载文件的地方
-- file_path_prefix - [chat_title:聊天频道标题，file_data_time:文件发布时间, meida_type:媒体类型]
-- **file_path_prefix**
+- **save_path** - 你想存储下载文件的根目录
+- **file_path_prefix** - 存储文件子文件夹，列表的顺序不定，可以随机组合
   - `chat_title`      - 聊天频道或者群组标题, 如果找不到标题则为配置文件中的`chat_id`
   - `media_datetime`  - 资源的发布时间
   - `meida_type`      - 资源类型，类型查阅 `media_types`
@@ -136,11 +135,23 @@ disable_syslog:
 python3 media_downloader.py
 ```
 
-所有下载的媒体都将存储在“save_path”中，文件名包括频道ID或聊天ID。所有文件均按“月”租用。
+所有下载的媒体都将存储在`save_path`根目录下。
+具体位置参考如下：
+
+```yaml
+file_path_prefix:
+  - chat_title
+  - media_datetime
+  - meida_type
+```
+
+视频下载完整目录为：`save_path`/`chat_title`/`media_datetime`/`meida_type`。
+列表的顺序不定，可以随机组合。
+如果配置为空，则所有文件保存在`save_path`下。
 
 ## 代理
 
-该项目目前支持 socks4、socks5、http 代理。要使用它，请将以下内容添加到“config.yaml”文件的底部
+该项目目前支持 socks4、socks5、http 代理。要使用它，请将以下内容添加到`config.yaml`文件的底部
 
 ```yaml
 代理人：
