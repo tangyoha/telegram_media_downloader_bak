@@ -54,16 +54,15 @@ def _check_download_finish(media_size: Any, download_path: str, message_id: int)
     if media_size is not None:
         download_size = os.path.getsize(download_path)
         if media_size == download_size:
-            logger.log(CUSTOM_LOG,
-                       "Media downloaded - %s", download_path)
+            logger.log(CUSTOM_LOG, "Media downloaded - %s", download_path)
             app.downloaded_ids.append(message_id)
             app.total_download_task += 1
         else:
-            logger.log(CUSTOM_LOG,
-                       'Media downloaded with wrong size - %s', download_path)
+            logger.log(
+                CUSTOM_LOG, "Media downloaded with wrong size - %s", download_path
+            )
             os.remove(download_path)
-            raise TypeError(
-                'Media downloaded with wrong size')
+            raise TypeError("Media downloaded with wrong size")
 
 
 def _validate_title(title: str):
@@ -146,14 +145,13 @@ async def _get_media_meta(
     """
     if _type in ["audio", "document", "video"]:
         # pylint: disable = C0301
-        file_format: Optional[str] = media_obj.mime_type.split(  # type: ignore
-            "/")[-1]
+        file_format: Optional[str] = media_obj.mime_type.split("/")[-1]  # type: ignore
     else:
         file_format = None
 
-    dirname = _validate_title(f'{app.chat_id}')
-    if message.chat:
-        dirname = _validate_title(f'{message.chat.title}')
+    dirname = _validate_title(f"{app.chat_id}")
+    if message.chat and message.chat.title:
+        dirname = _validate_title(f"{message.chat.title}")
 
     if message.date:
         datetime_dir_name = message.date.strftime("%Y_%m")
@@ -163,8 +161,10 @@ async def _get_media_meta(
     if _type in ["voice", "video_note"]:
         # pylint: disable = C0209
         file_format = media_obj.mime_type.split("/")[-1]  # type: ignore
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
+
         file_name: str = os.path.join(
-            app.save_path, dirname, datetime_dir_name,
+            file_save_path,
             "{} - {}_{}.{}".format(
                 message.id,
                 _type,
@@ -180,8 +180,8 @@ async def _get_media_meta(
                 file_format = "jpg"
             file_name = f"{file_name}.{file_format}"
 
-        file_name = os.path.join(
-            app.save_path, dirname, datetime_dir_name, f"{message.id} - {file_name}")
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
+        file_name = os.path.join(file_save_path, f"{message.id} - {file_name}")
     return file_name, file_format
 
 
@@ -239,8 +239,11 @@ async def download_media(
                         # if media_size is not None and file_size != media_size:
 
                         # FIXME: if exist and not empty file skip
-                        logger.log(CUSTOM_LOG,
-                                   "%s alreay download,download skipped.\n", file_name)
+                        logger.log(
+                            CUSTOM_LOG,
+                            "%s alreay download,download skipped.\n",
+                            file_name,
+                        )
                         break
 
                     download_path = await client.download_media(
@@ -248,10 +251,9 @@ async def download_media(
                     )
 
                     if download_path and isinstance(download_path, str):
-                        media_size = getattr(_media, 'file_size')
+                        media_size = getattr(_media, "file_size")
                         # TODO: if not exist file size or media
-                        _check_download_finish(
-                            media_size, download_path, message.id)
+                        _check_download_finish(media_size, download_path, message.id)
 
                     app.downloaded_ids.append(message.id)
             break
@@ -362,6 +364,8 @@ async def begin_import(pagination_limit: int):
         proxy=app.proxy,
     )
     await client.start()
+    print("Successfully started (Press Ctrl+C to stop)")
+
     last_read_message_id: int = app.last_read_message_id
     messages_iter = client.get_chat_history(
         app.chat_id, offset_id=app.last_read_message_id, reverse=True
@@ -391,7 +395,9 @@ async def begin_import(pagination_limit: int):
                 app.update_config()
 
     async for message in messages_iter:  # type: ignore
-        if pagination_count != pagination_limit and not app.need_skip_message(message.id):
+        if pagination_count != pagination_limit and not app.need_skip_message(
+            message.id
+        ):
             pagination_count += 1
             messages_list.append(message)
         else:
@@ -421,26 +427,30 @@ async def begin_import(pagination_limit: int):
 def main():
     """Main function of the downloader."""
     try:
-        asyncio.get_event_loop().run_until_complete(
-            begin_import(pagination_limit=100)
-        )
+        asyncio.get_event_loop().run_until_complete(begin_import(pagination_limit=100))
         if app.failed_ids:
-            logger.log(CUSTOM_LOG,
-                       "Downloading of %d files failed. "
-                       "Failed message ids are added to config file.\n"
-                       "These files will be downloaded on the next run.",
-                       len(set(app.failed_ids)),
-                       )
-        app.update_config()
+            logger.log(
+                CUSTOM_LOG,
+                "Downloading of %d files failed. "
+                "Failed message ids are added to config file.\n"
+                "These files will be downloaded on the next run.",
+                len(set(app.failed_ids)),
+            )
         check_for_updates()
+    except KeyboardInterrupt:
+        logger.log(CUSTOM_LOG, "Stopped!")
     except Exception as e:
         logger.exception("%s", e)
+    finally:
+        logger.log(CUSTOM_LOG, "update config......")
         app.update_config()
 
 
 if __name__ == "__main__":
     print_meta(logger)
     main()
-    logger.log(CUSTOM_LOG,
-               "Updated last read message_id to config file, total download %s",
-               app.total_download_task)
+    logger.log(
+        CUSTOM_LOG,
+        "Updated last read message_id to config file, total download %s",
+        app.total_download_task,
+    )
