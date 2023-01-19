@@ -30,7 +30,7 @@ repos:
         types: [python]
         args: [--ignore-missing-imports]
         files: utils/|media_downloader.py|module
-        exclude: tests/
+        exclude: tests/|module/templates|module/statics
 -   repo: https://github.com/pycqa/pylint
     rev: v2.14.5
     hooks:
@@ -45,4 +45,4 @@ repos:
           "--rcfile=pylintrc" # Link to your config file
         ]
         files: utils/|media_downloader.py|module
-        exclude: tests/
+        exclude: tests/|module/templates|module/static
