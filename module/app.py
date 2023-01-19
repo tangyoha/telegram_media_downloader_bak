@@ -157,7 +157,8 @@ class Application:
                     "upload_adapter"
                 ]
 
-        self.file_name_prefix_split = self.config.get("file_name_prefix_split", " - ")
+        self.file_name_prefix_split = self.config.get(
+            "file_name_prefix_split", " - ")
 
         self.max_concurrent_transmissions = self.config.get(
             "max_concurrent_transmissions", 1
@@ -228,7 +229,7 @@ class Application:
         return res
 
     def get_file_name(
-        self, message_id: int, file_name: str | None, caption: str | None
+        self, message_id: int, file_name: Optional[str], caption: Optional[str]
     ) -> str:
         """Get file save path prefix.
 
@@ -237,10 +238,10 @@ class Application:
         message_id: int
             Message id
 
-        file_name: str
+        file_name: Optional[str]
             File name
 
-        caption: str
+        caption: Optional[str]
             Message caption
 
         Returns
@@ -292,7 +293,8 @@ class Application:
 
         # pylint: disable = W0201
         self.ids_to_retry = (
-            list(set(self.ids_to_retry) - set(self.downloaded_ids)) + self.failed_ids
+            list(set(self.ids_to_retry) -
+                 set(self.downloaded_ids)) + self.failed_ids
         )
 
         self.config["last_read_message_id"] = self.last_read_message_id
