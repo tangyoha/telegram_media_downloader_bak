@@ -2,7 +2,6 @@
 
 import platform
 
-
 # def get_platform() -> str:
 #     """Get platform title
 #     Returns

@@ -31,7 +31,7 @@ MOCK_CONF = {
     "media_types": ["audio", "voice"],
     "file_formats": {"audio": ["all"], "voice": ["all"]},
     "save_path": MOCK_DIR,
-    "file_name_prefix": ["message_id", "caption", "file_name"]
+    "file_name_prefix": ["message_id", "caption", "file_name"],
 }
 
 
@@ -386,7 +386,8 @@ class MediaDownloaderTestCase(unittest.TestCase):
         self.assertEqual(
             (
                 platform_generic_path(
-                    "/root/project/test2/2019_08/2 - #home #book.jpg"),
+                    "/root/project/test2/2019_08/2 - #home #book.jpg"
+                ),
                 "jpg",
             ),
             result,
@@ -407,8 +408,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/test2/0/3 - sample_document.pdf"),
+                platform_generic_path("/root/project/test2/0/3 - sample_document.pdf"),
                 "pdf",
             ),
             result,
@@ -434,7 +434,8 @@ class MediaDownloaderTestCase(unittest.TestCase):
         self.assertEqual(
             (
                 platform_generic_path(
-                    "/root/project/test2/0/3-#work-sample_document.pdf"),
+                    "/root/project/test2/0/3-#work-sample_document.pdf"
+                ),
                 "pdf",
             ),
             result,
@@ -480,8 +481,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/test2/2022_08/5.mp4"),
+                platform_generic_path("/root/project/test2/2022_08/5.mp4"),
                 "mp4",
             ),
             result,
@@ -503,8 +503,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/test2/2022_08/5 - test.mp4"),
+                platform_generic_path("/root/project/test2/2022_08/5 - test.mp4"),
                 "mp4",
             ),
             result,
@@ -528,8 +527,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         print(app.chat_id)
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/8654123/2022_08/5 - test.mp4"),
+                platform_generic_path("/root/project/8654123/2022_08/5 - test.mp4"),
                 "mp4",
             ),
             result,

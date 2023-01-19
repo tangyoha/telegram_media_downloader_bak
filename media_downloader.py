@@ -7,16 +7,16 @@ import threading
 import time
 from typing import List, Optional, Tuple, Union
 
-from loguru import logger
-from rich.logging import RichHandler
 import pyrogram
+from loguru import logger
 from pyrogram.types import Audio, Document, Photo, Video, VideoNote, Voice
+from rich.logging import RichHandler
 
+from module.app import Application
+from module.web import get_flask_app, update_download_status
 from utils.log import LogFilter
 from utils.meta import print_meta
 from utils.updates import check_for_updates
-from module.app import Application
-from module.web import get_flask_app, update_download_status
 
 logging.basicConfig(
     level=logging.INFO,
@@ -35,7 +35,7 @@ RETRY_TIME_OUT = 60
 logging.getLogger("pyrogram.session.session").addFilter(LogFilter())
 logging.getLogger("pyrogram.client").addFilter(LogFilter())
 
-logging.getLogger('pyrogram').setLevel(logging.WARNING)
+logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
 def _check_download_finish(media_size: int, download_path: str, message_id: int):
@@ -57,9 +57,7 @@ def _check_download_finish(media_size: int, download_path: str, message_id: int)
         app.downloaded_ids.append(message_id)
         app.total_download_task += 1
     else:
-        logger.error(
-            "Media downloaded with wrong size - {}", download_path
-        )
+        logger.error("Media downloaded with wrong size - {}", download_path)
         os.remove(download_path)
         raise TypeError("Media downloaded with wrong size")
 
@@ -144,8 +142,7 @@ async def _get_media_meta(
     """
     if _type in ["audio", "document", "video"]:
         # pylint: disable = C0301
-        file_format: Optional[str] = media_obj.mime_type.split(  # type: ignore
-            "/")[-1]
+        file_format: Optional[str] = media_obj.mime_type.split("/")[-1]  # type: ignore
     else:
         file_format = None
 
@@ -162,8 +159,7 @@ async def _get_media_meta(
     if _type in ["voice", "video_note"]:
         # pylint: disable = C0209
         file_format = media_obj.mime_type.split("/")[-1]  # type: ignore
-        file_save_path = app.get_file_save_path(
-            _type, dirname, datetime_dir_name)
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
 
         file_name = os.path.join(
             file_save_path,
@@ -183,16 +179,14 @@ async def _get_media_meta(
         else:
             caption = app.get_caption_name(app.chat_id, message.media_group_id)
 
-        gen_file_name = app.get_file_name(
-            message.id, file_name, caption)
+        gen_file_name = app.get_file_name(message.id, file_name, caption)
 
         if not file_name:
             if message.photo:
                 file_format = "jpg"
             gen_file_name = f"{gen_file_name}.{file_format}"
 
-        file_save_path = app.get_file_save_path(
-            _type, dirname, datetime_dir_name)
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
         file_name = os.path.join(file_save_path, gen_file_name)
     return file_name, file_format
 
@@ -264,21 +258,27 @@ async def download_media(
                         break
 
                     if app.hide_file_name:
-                        ui_file_name = os.path.dirname(
-                            file_name) + "/****" + os.path.splitext(file_name)[-1]
+                        ui_file_name = (
+                            os.path.dirname(file_name)
+                            + "/****"
+                            + os.path.splitext(file_name)[-1]
+                        )
 
                     download_path = await client.download_media(
-                        message, file_name=file_name,
-                        progress=lambda down_byte, total_byte:
-                        update_download_status(
-                            message.id, down_byte, total_byte,
-                            ui_file_name, task_start_time)
+                        message,
+                        file_name=file_name,
+                        progress=lambda down_byte, total_byte: update_download_status(
+                            message.id,
+                            down_byte,
+                            total_byte,
+                            ui_file_name,
+                            task_start_time,
+                        ),
                     )
                     if download_path and isinstance(download_path, str):
                         media_size = getattr(_media, "file_size", 0)
                         # TODO: if not exist file size or media
-                        _check_download_finish(
-                            media_size, download_path, message.id)
+                        _check_download_finish(media_size, download_path, message.id)
                         await app.upload_file(file_name)
 
                     app.downloaded_ids.append(message.id)
@@ -315,7 +315,11 @@ async def download_media(
         except Exception as e:
             # pylint: disable = C0301
             logger.error(
-                "Message[{}]: could not be downloaded due to following exception:\n[{}].", message.id, e, exc_info=True)
+                "Message[{}]: could not be downloaded due to following exception:\n[{}].",
+                message.id,
+                e,
+                exc_info=True,
+            )
             app.failed_ids.append(message.id)
             break
     return message.id
@@ -453,7 +457,6 @@ def main():
         asyncio.get_event_loop().run_until_complete(begin_import(pagination_limit=10))
         if app.failed_ids:
             logger.error(
-
                 "Downloading of {} files failed. "
                 "Failed message ids are added to config file.\n"
                 "These files will be downloaded on the next run.",
@@ -477,5 +480,5 @@ if __name__ == "__main__":
         "Updated last read message_id to config file,"
         "total download {}, total upload file {}",
         app.total_download_task,
-        app.cloud_drive_config.total_upload_success_file_count
+        app.cloud_drive_config.total_upload_success_file_count,
     )

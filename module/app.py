@@ -1,6 +1,7 @@
 """Application module"""
 import os
 from typing import List, Optional
+
 import yaml
 from loguru import logger
 
@@ -12,8 +13,12 @@ from module.cloud_drive import CloudDrive, CloudDriveConfig
 class Application:
     """Application load config and update config."""
 
-    def __init__(self, config_file: str,
-                 app_data_file: str, application_name: str = "UndefineApp"):
+    def __init__(
+        self,
+        config_file: str,
+        app_data_file: str,
+        application_name: str = "UndefineApp",
+    ):
         """
         Init and update telegram media downloader config
 
@@ -128,32 +133,35 @@ class Application:
             upload_drive_config = _config["upload_drive"]
             if upload_drive_config.get("enable_upload_file"):
                 self.cloud_drive_config.enable_upload_file = upload_drive_config[
-                    "enable_upload_file"]
+                    "enable_upload_file"
+                ]
 
             if upload_drive_config.get("rclone_path"):
                 self.cloud_drive_config.rclone_path = upload_drive_config["rclone_path"]
 
             if upload_drive_config.get("remote_dir"):
-                self.cloud_drive_config.remote_dir = upload_drive_config[
-                    "remote_dir"]
+                self.cloud_drive_config.remote_dir = upload_drive_config["remote_dir"]
 
             if upload_drive_config.get("before_upload_file_zip"):
                 self.cloud_drive_config.before_upload_file_zip = upload_drive_config[
-                    "before_upload_file_zip"]
+                    "before_upload_file_zip"
+                ]
 
             if upload_drive_config.get("after_upload_file_delete"):
                 self.cloud_drive_config.after_upload_file_delete = upload_drive_config[
-                    "after_upload_file_delete"]
+                    "after_upload_file_delete"
+                ]
 
             if upload_drive_config.get("upload_adapter"):
                 self.cloud_drive_config.upload_adapter = upload_drive_config[
-                    "upload_adapter"]
+                    "upload_adapter"
+                ]
 
-        self.file_name_prefix_split = self.config.get(
-            "file_name_prefix_split", " - ")
+        self.file_name_prefix_split = self.config.get("file_name_prefix_split", " - ")
 
         self.max_concurrent_transmissions = self.config.get(
-            "max_concurrent_transmissions", 1)
+            "max_concurrent_transmissions", 1
+        )
 
         return True
 
@@ -183,8 +191,9 @@ class Application:
 
     def upload_file(self, local_file_path: str):
         """Upload file"""
-        return CloudDrive.upload_file(self.cloud_drive_config,
-                                      self.save_path, local_file_path)
+        return CloudDrive.upload_file(
+            self.cloud_drive_config, self.save_path, local_file_path
+        )
 
     def get_file_save_path(
         self, media_type: str, chat_title: str, media_datetime: str
@@ -283,8 +292,7 @@ class Application:
 
         # pylint: disable = W0201
         self.ids_to_retry = (
-            list(set(self.ids_to_retry) -
-                 set(self.downloaded_ids)) + self.failed_ids
+            list(set(self.ids_to_retry) - set(self.downloaded_ids)) + self.failed_ids
         )
 
         self.config["last_read_message_id"] = self.last_read_message_id
@@ -300,7 +308,7 @@ class Application:
         # for it in self.downloaded_ids:
         #    self.already_download_ids_set.add(it)
 
-        #self.app_data["already_download_ids"] = list(self.already_download_ids_set)
+        # self.app_data["already_download_ids"] = list(self.already_download_ids_set)
 
         if immediate:
             with open(self.config_file, "w") as yaml_file:
@@ -314,7 +322,9 @@ class Application:
         """before run application do"""
         self.cloud_drive_config.pre_run()
 
-    def set_caption_name(self, chat_id: str, media_group_id: Optional[str], caption: str):
+    def set_caption_name(
+        self, chat_id: str, media_group_id: Optional[str], caption: str
+    ):
         """set caption name map
 
         Parameters
@@ -336,8 +346,9 @@ class Application:
         else:
             self.caption_name_dict[chat_id] = {media_group_id: caption}
 
-    def get_caption_name(self, chat_id: str,
-                         media_group_id: Optional[str]) -> Optional[str]:
+    def get_caption_name(
+        self, chat_id: str, media_group_id: Optional[str]
+    ) -> Optional[str]:
         """set caption name map
                 media_group_id: Optional[str]
             The unique identifier of a media message group this message belongs to.
@@ -346,8 +357,11 @@ class Application:
             Caption for the audio, document, photo, video or voice, 0-1024 characters.
         """
 
-        if not media_group_id or chat_id not in self.caption_name_dict or \
-                media_group_id not in self.caption_name_dict[chat_id]:
+        if (
+            not media_group_id
+            or chat_id not in self.caption_name_dict
+            or media_group_id not in self.caption_name_dict[chat_id]
+        ):
             return None
 
         return str(self.caption_name_dict[chat_id][media_group_id])

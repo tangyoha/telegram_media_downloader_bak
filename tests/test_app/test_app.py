@@ -32,8 +32,7 @@ class AppTestCase(unittest.TestCase):
 
         app.update_config(False)
 
-        self.assertEqual(app.last_read_message_id,
-                         app.config["last_read_message_id"])
+        self.assertEqual(app.last_read_message_id, app.config["last_read_message_id"])
         self.assertEqual(app.ids_to_retry, app.app_data["ids_to_retry"])
 
     @mock.patch("__main__.__builtins__.open", new_callable=mock.mock_open)
