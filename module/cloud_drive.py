@@ -52,13 +52,13 @@ class CloudDrive:
     @staticmethod
     def rclone_mkdir(drive_config: CloudDriveConfig, remote_dir: str):
         """mkdir in remote"""
-        proc = Popen(
+        with Popen(
             f'"{drive_config.rclone_path}" mkdir {remote_dir}/',
             shell=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-        )
-        proc.wait()
+        ):
+            pass
 
     @staticmethod
     def aligo_mkdir(drive_config: CloudDriveConfig, remote_dir: str):
