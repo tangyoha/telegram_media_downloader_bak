@@ -216,6 +216,7 @@ async def _get_media_meta(
     return file_name, file_format
 
 
+# pylint: disable = R0915
 async def download_media(
     client: pyrogram.client.Client,
     message: pyrogram.types.Message,
