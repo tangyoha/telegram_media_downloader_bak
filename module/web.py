@@ -137,7 +137,7 @@ def get_download_list():
             + '" ,"download_progress":"'
         )
         result += (
-            f'{round(value["down_byte"] / value["total_size"] * 100, 0)}'
+            f'{round(value["down_byte"] / value["total_size"] * 100, 1)}'
             + '" ,"download_speed":"'
             + download_speed
             + '" ,"save_path":"'
