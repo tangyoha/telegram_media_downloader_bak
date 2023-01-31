@@ -363,7 +363,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (
-                platform_generic_path("/root/project/test2/2019_08/2.jpg"),
+                platform_generic_path("/root/project/test2/2019_08/2 - ADAVKJYIFV.jpg"),
                 "jpg",
             ),
             result,
@@ -386,7 +386,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         self.assertEqual(
             (
                 platform_generic_path(
-                    "/root/project/test2/2019_08/2 - #home #book.jpg"
+                    "/root/project/test2/2019_08/2 - #home #book - ADAVKJYIFV.jpg"
                 ),
                 "jpg",
             ),
