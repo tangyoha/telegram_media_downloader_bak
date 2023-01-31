@@ -57,8 +57,7 @@ def update_download_status(
         each_second_total_download += down_byte - last_download_byte
 
         if cur_time - last_time >= 1.0:
-            download_speed = int(
-                each_second_total_download / (cur_time - last_time))
+            download_speed = int(each_second_total_download / (cur_time - last_time))
             end_time = cur_time
             each_second_total_download = 0
 
@@ -67,8 +66,9 @@ def update_download_status(
         _download_result[message_id]["down_byte"] = down_byte
         _download_result[message_id]["end_time"] = end_time
         _download_result[message_id]["download_speed"] = download_speed
-        _download_result[message_id]["each_second_total_download"] =\
-            each_second_total_download
+        _download_result[message_id][
+            "each_second_total_download"
+        ] = each_second_total_download
     else:
         each_second_total_download = down_byte
         _download_result[message_id] = {

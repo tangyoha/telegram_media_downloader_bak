@@ -160,8 +160,7 @@ async def _get_media_meta(
     """
     if _type in ["audio", "document", "video"]:
         # pylint: disable = C0301
-        file_format: Optional[str] = media_obj.mime_type.split(  # type: ignore
-            "/")[-1]
+        file_format: Optional[str] = media_obj.mime_type.split("/")[-1]  # type: ignore
     else:
         file_format = None
 
@@ -178,8 +177,7 @@ async def _get_media_meta(
     if _type in ["voice", "video_note"]:
         # pylint: disable = C0209
         file_format = media_obj.mime_type.split("/")[-1]  # type: ignore
-        file_save_path = app.get_file_save_path(
-            _type, dirname, datetime_dir_name)
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
 
         file_name = os.path.join(
             file_save_path,
@@ -198,7 +196,7 @@ async def _get_media_meta(
         if not file_name:
             if message.photo:
                 file_format = "jpg"
-            file_name_suffix = f'.{file_format}'
+            file_name_suffix = f".{file_format}"
 
         if caption:
             caption = _validate_title(caption)
@@ -209,11 +207,11 @@ async def _get_media_meta(
         if not file_name and message.photo:
             file_name = f"{message.photo.file_unique_id}"
 
-        gen_file_name = app.get_file_name(message.id, file_name, caption) +\
-            file_name_suffix
+        gen_file_name = (
+            app.get_file_name(message.id, file_name, caption) + file_name_suffix
+        )
 
-        file_save_path = app.get_file_save_path(
-            _type, dirname, datetime_dir_name)
+        file_save_path = app.get_file_save_path(_type, dirname, datetime_dir_name)
         file_name = os.path.join(file_save_path, gen_file_name)
     return file_name, file_format
 

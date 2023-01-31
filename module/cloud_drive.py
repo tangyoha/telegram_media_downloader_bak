@@ -64,8 +64,7 @@ class CloudDrive:
     def aligo_mkdir(drive_config: CloudDriveConfig, remote_dir: str):
         """mkdir in remote by aligo"""
         if drive_config.aligo and not drive_config.aligo.get_folder_by_path(remote_dir):
-            drive_config.aligo.create_folder(
-                name=remote_dir, check_name_mode="refuse")
+            drive_config.aligo.create_folder(name=remote_dir, check_name_mode="refuse")
 
     @staticmethod
     def zip_file(local_file_path: str) -> str:
@@ -73,8 +72,7 @@ class CloudDrive:
         Zip local file
         """
 
-        zip_file_name = os.path.basename(
-            local_file_path).split(".")[0] + ".zip"
+        zip_file_name = os.path.basename(local_file_path).split(".")[0] + ".zip"
         with ZipFile(zip_file_name, "w") as zip_writer:
             zip_writer.write(local_file_path)
 
@@ -86,9 +84,12 @@ class CloudDrive:
     ):
         """Use Rclone upload file"""
         try:
-            remote_dir = (drive_config.remote_dir + '/' +
-                          os.path.dirname(local_file_path).replace(save_path, '') +
-                          '/').replace("\\", "/")
+            remote_dir = (
+                drive_config.remote_dir
+                + "/"
+                + os.path.dirname(local_file_path).replace(save_path, "")
+                + "/"
+            ).replace("\\", "/")
 
             if not drive_config.dir_cache.get(remote_dir):
                 CloudDrive.rclone_mkdir(drive_config, remote_dir)
@@ -134,16 +135,17 @@ class CloudDrive:
             return
 
         try:
-            remote_dir = (drive_config.remote_dir + '/' +
-                          os.path.dirname(local_file_path).replace(save_path, '') +
-                          '/').replace("\\", "/")
+            remote_dir = (
+                drive_config.remote_dir
+                + "/"
+                + os.path.dirname(local_file_path).replace(save_path, "")
+                + "/"
+            ).replace("\\", "/")
             if not drive_config.dir_cache.get(remote_dir):
                 CloudDrive.aligo_mkdir(drive_config, remote_dir)
                 aligo_dir = drive_config.aligo.get_folder_by_path(remote_dir)
                 if aligo_dir:
-                    drive_config.dir_cache[
-                        remote_dir
-                    ] = aligo_dir.file_id
+                    drive_config.dir_cache[remote_dir] = aligo_dir.file_id
 
             zip_file_path: str = ""
             file_paths = []
