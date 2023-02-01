@@ -31,7 +31,7 @@ jobs:
       run: python -m pip install --upgrade pip setuptools codecov
     - name: Get setuptools Windows
       if: ${{ matrix.os == 'windows-latest' }}
-      run: python -m pip install --upgrade pip setuptools codecovs
+      run: python -m pip install --upgrade pip setuptools codecov
     - name: Install dependencies
       run: make dev_install
     - name: Test with pytest
