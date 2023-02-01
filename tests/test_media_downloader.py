@@ -77,6 +77,7 @@ def mock_manage_duplicate_file(file_path: str) -> str:
 def raise_keyboard_interrupt():
     raise KeyboardInterrupt
 
+
 def raise_exception():
     raise Exception
 
@@ -373,8 +374,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/test2/2019_08/2 - ADAVKJYIFV.jpg"),
+                platform_generic_path("/root/project/test2/2019_08/2 - ADAVKJYIFV.jpg"),
                 "jpg",
             ),
             result,
@@ -419,8 +419,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/test2/0/3 - sample_document.pdf"),
+                platform_generic_path("/root/project/test2/0/3 - sample_document.pdf"),
                 "pdf",
             ),
             result,
@@ -515,8 +514,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         )
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/test2/2022_08/5 - test.mp4"),
+                platform_generic_path("/root/project/test2/2022_08/5 - test.mp4"),
                 "mp4",
             ),
             result,
@@ -540,8 +538,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
         print(app.chat_id)
         self.assertEqual(
             (
-                platform_generic_path(
-                    "/root/project/8654123/2022_08/5 - test.mp4"),
+                platform_generic_path("/root/project/8654123/2022_08/5 - test.mp4"),
                 "mp4",
             ),
             result,
@@ -710,9 +707,7 @@ class MediaDownloaderTestCase(unittest.TestCase):
             )
         )
         self.assertEqual(420, result)
-        mock_logger.warning.assert_called_with(
-            "Message[{}]: FlowWait {}", 420, 420
-        )
+        mock_logger.warning.assert_called_with("Message[{}]: FlowWait {}", 420, 420)
         self.assertEqual(app.failed_ids.count(420), 1)
 
         # Test other Exception
