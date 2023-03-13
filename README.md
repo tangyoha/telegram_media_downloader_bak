@@ -31,7 +31,7 @@ A meta of last read/downloaded message is stored in the config file so that in s
 
 ![web](./screenshot/web_ui.gif)
 
-
+### 项目已经永久移动到 https://github.com/tangyoha/telegram_media_downloader
 ### This project has been migrated to https://github.com/tangyoha/telegram_media_downloader
 
 
